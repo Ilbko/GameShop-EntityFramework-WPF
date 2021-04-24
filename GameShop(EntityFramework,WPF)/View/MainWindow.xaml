@@ -6,7 +6,76 @@
         xmlns:local="clr-namespace:GameShop_EntityFramework_WPF_"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Background="LightGray">
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Background" Value="DarkGray"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="DarkGray"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="5">
+            <MenuItem Header="Поиск">
+                <MenuItem Header="По названию">
+                    <MenuItem Name="ByNameMenuItem" Header="Игры"></MenuItem>
+                    <MenuItem Name="ByStudioMenuItem" Header="Студии"></MenuItem>
+                    <MenuItem Name="ByNameAndStudioMenuItem" Header="Студии и игры"></MenuItem>
+                </MenuItem>
+                <MenuItem Name="ByStyle" Header="По стилю"></MenuItem>
+                <MenuItem Name="ByReleaseDate" Header="По году релиза"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Поиск по запросам">
+                <MenuItem Name="AllSingleplayerMenuItem" Header="Все однопользовательские"></MenuItem>
+                <MenuItem Name="AllMultiplayerMenuItem" Header="Все многопользовательские"></MenuItem>
+                <MenuItem Name="MaxSoldMenuItem" Header="Макс. проданных копий"></MenuItem>
+                <MenuItem Name="MinSoldMenuItem" Header="Мин. проданных копий"></MenuItem>
+                <MenuItem Name="Top3BestMenuItem" Header="Топ-3 продаваемых игр"></MenuItem>
+                <MenuItem Name="Top3WorstMenuItem" Header="Топ-3 непродаваемых игр"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Label Grid.Row="1" Grid.Column="0" Foreground="GreenYellow" FontSize="15" Padding="1" Margin="4">Все игры</Label>
+        <Label Grid.Row="1" Grid.Column="4" Foreground="Orange" FontSize="15" Padding="1" Margin="4">Найденные игры</Label>
+        <DataGrid Name="MainDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2"></DataGrid>
+        <Button Name="DeleteButton" Grid.Row="2" Grid.Column="2" Margin="15" Foreground="Yellow" IsEnabled="False"> Удалить</Button>
+        <DataGrid Name="SearchDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"></DataGrid>
+        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <Label Foreground="Aquamarine">Название</Label>
+            <TextBox Name="NameTextBox"></TextBox>
+            <Label Foreground="Aquamarine">Студия</Label>
+            <TextBox Name="StudioTextBox"></TextBox>
+            <Label Foreground="Aquamarine">Копии</Label>
+            <TextBox Name="SoldAmountTextBox"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="2">
+            <Label Foreground="Aquamarine">Мультиплеер</Label>
+            <ComboBox Name="IsMultiplayerComboBox">
+                <ComboBoxItem>Нет</ComboBoxItem>
+                <ComboBoxItem>Да</ComboBoxItem>
+            </ComboBox>
+            <Label Foreground="Aquamarine">Стиль</Label>
+            <ComboBox Name="StyleComboBox"></ComboBox>
+            <DatePicker Name="DateComboBox"></DatePicker>
+        </StackPanel>
+        <Button Name="AcceptChangesButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5" Margin="15" Foreground="White" FontSize="25" Padding="-10">Применить изменения</Button>
     </Grid>
 </Window>
