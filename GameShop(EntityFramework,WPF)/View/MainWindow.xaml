@@ -3,18 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GameShop_EntityFramework_WPF_"
+        xmlns:local="clr-namespace:GameShop_EntityFramework_WPF_" 
+        xmlns:local1="clr-namespace:GameShop_EntityFramework_WPF_.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local1:StyleConverter x:Key="myStyleConverter"></local1:StyleConverter>
+    </Window.Resources>
     <Grid Background="LightGray">
         <Grid.Resources>
             <Style TargetType="Label">
                 <Setter Property="Background" Value="DarkGray"></Setter>
                 <Setter Property="FontWeight" Value="Bold"></Setter>
+                <Setter Property="BorderBrush" Value="Black"></Setter>
+                <Setter Property="BorderThickness" Value="1"></Setter>
             </Style>
             <Style TargetType="Button">
                 <Setter Property="Background" Value="DarkGray"></Setter>
                 <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Style>
+            <Style TargetType="DataGrid">
+                <Setter Property="IsReadOnly" Value="True"></Setter>
+                <Setter Property="AutoGenerateColumns" Value="False"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -30,8 +40,8 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Menu Grid.ColumnSpan="5">
@@ -55,27 +65,38 @@
         </Menu>
         <Label Grid.Row="1" Grid.Column="0" Foreground="GreenYellow" FontSize="15" Padding="1" Margin="4">Все игры</Label>
         <Label Grid.Row="1" Grid.Column="4" Foreground="Orange" FontSize="15" Padding="1" Margin="4">Найденные игры</Label>
-        <DataGrid Name="MainDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2"></DataGrid>
+        <DataGrid Name="MainDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}" MouseDown="DataGrid_MouseDown" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Game_Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="StyleId" Binding="{Binding Game_StyleId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Game_Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Studio" Binding="{Binding Game_Studio}"></DataGridTextColumn>
+                <DataGridTextColumn Header="SoldAmount" Binding="{Binding Game_SoldAmount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="IsMultiplayer" Binding="{Binding Game_IsMultiplayer}"></DataGridTextColumn>
+                <DataGridTextColumn Header="ReleaseDate" Binding="{Binding Game_ReleaseDate}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Name="DeleteButton" Grid.Row="2" Grid.Column="2" Margin="15" Foreground="Yellow" IsEnabled="False"> Удалить</Button>
         <DataGrid Name="SearchDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"></DataGrid>
-        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding SelectedGame}">
             <Label Foreground="Aquamarine">Название</Label>
-            <TextBox Name="NameTextBox"></TextBox>
+            <TextBox Name="NameTextBox" Text="{Binding Game_Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Foreground="Aquamarine">Студия</Label>
-            <TextBox Name="StudioTextBox"></TextBox>
+            <TextBox Name="StudioTextBox" Text="{Binding Game_Studio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Foreground="Aquamarine">Копии</Label>
-            <TextBox Name="SoldAmountTextBox"></TextBox>
+            <TextBox Name="SoldAmountTextBox" Text="{Binding Game_SoldAmount, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="SoldAmountTextBox_PreviewTextInput"></TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="2" DataContext="{Binding SelectedGame}">
             <Label Foreground="Aquamarine">Мультиплеер</Label>
-            <ComboBox Name="IsMultiplayerComboBox">
+            <ComboBox Name="IsMultiplayerComboBox" SelectedIndex="{Binding Game_IsMultiplayer}">
                 <ComboBoxItem>Нет</ComboBoxItem>
                 <ComboBoxItem>Да</ComboBoxItem>
             </ComboBox>
             <Label Foreground="Aquamarine">Стиль</Label>
-            <ComboBox Name="StyleComboBox"></ComboBox>
-            <DatePicker Name="DateComboBox"></DatePicker>
+            <ComboBox Name="StyleComboBox" SelectedIndex="{Binding Game_StyleId, Converter={StaticResource myStyleConverter}}"></ComboBox>
+            <Label Foreground="Aquamarine">Дата релиза</Label>
+            <DatePicker Name="DateDatePicker" SelectedDate="{Binding Game_ReleaseDate}"></DatePicker>
         </StackPanel>
-        <Button Name="AcceptChangesButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5" Margin="15" Foreground="White" FontSize="25" Padding="-10">Применить изменения</Button>
+        <Button Name="AddButton" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="5" Margin="15" Foreground="White" FontSize="25" Padding="-10" Click="AddButton_Click">Добавить игру</Button>
     </Grid>
 </Window>
