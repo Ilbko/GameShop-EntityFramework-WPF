@@ -21,6 +21,8 @@ namespace GameShop_EntityFramework_WPF_
     /// </summary>
     public partial class MainWindow : Window
     {
+        Logic logic = new Logic();
+        bool changes = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,38 +35,42 @@ namespace GameShop_EntityFramework_WPF_
             //this.NameTextBox.Text = Communication.gameViewModel.Games.Count().ToString();
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Communication.gameViewModel.SelectedGame == null)
-                Communication.gameViewModel.Games.Add(new Model.Game
-                {
-                    Game_Name = this.NameTextBox.Text != string.Empty ? this.NameTextBox.Text : "template",
-                    Game_Studio = this.StudioTextBox.Text != string.Empty ? this.StudioTextBox.Text : "template",
-                    Game_SoldAmount = this.SoldAmountTextBox.Text != string.Empty ? Convert.ToInt32(this.SoldAmountTextBox.Text) : -1,
-                    Game_IsMultiplayer = Convert.ToBoolean(this.IsMultiplayerComboBox.SelectedIndex),
-                    Game_StyleId = this.StyleComboBox.SelectedIndex != -1 ? Convert.ToInt32(this.StyleComboBox.SelectedIndex + 1) : 1,
-                    Game_ReleaseDate = this.DateDatePicker.SelectedDate != null ? Convert.ToDateTime(this.DateDatePicker.SelectedDate) : DateTime.MinValue
-                });
-        }
+        private void AddButton_Click(object sender, RoutedEventArgs e) => logic.Add(this);
 
-        private void SoldAmountTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!Char.IsDigit(e.Text, 0))
-                e.Handled = true;
-        }
+        private void SoldAmountTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e) => logic.TextHandle(e);
 
-        private void DataGrid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-                (sender as DataGrid).SelectedIndex = -1;
-        }
+        private void DataGrid_MouseDown(object sender, MouseButtonEventArgs e) => logic.DataGridMouseRight(sender, e);
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.MainDataGrid.SelectedIndex == -1)
-                this.AddButton.IsEnabled = true;
-            else
-                this.AddButton.IsEnabled = false;
+            logic.DataGridSelectionChanged(sender, this.AddButton, this.DeleteButton);
+            changes = true;
+        }
+
+        private void AllSingleplayerMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.AllSinglePlayer();
+
+        private void AllMultiplayerMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.AllMultiplayer();
+
+        private void MaxSoldMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.MaxSold();
+
+        private void MinSoldMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.MinSold();
+
+        private void Top3BestMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.Top3Best();
+
+        private void Top3WorstMenuItem_MouseDown(object sender, RoutedEventArgs e) => logic.Top3Worst();
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) 
+        {
+            logic.Delete(this);
+            changes = true;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e) => logic.Search(sender);
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (changes)
+                logic.SaveChanges();
         }
     }
 }

@@ -15,15 +15,12 @@ namespace GameShop_EntityFramework_WPF_.ViewModel
     {
         public GameModel db = new GameModel();       
         public ObservableCollection<Game> Games { get; set; }
+        //При изменении элементов этой коллекции элементы главной коллекции также изменяются! Не зависит от selectedItem...
+        public ObservableCollection<Game> searchGames { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        //public void OnPropertyChanged([CallerMemberName] string prop = "") 
-        //    => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
+        public void OnPropertyChanged([CallerMemberName] string prop = "") 
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
         private Game selectedGame;
 
@@ -40,10 +37,10 @@ namespace GameShop_EntityFramework_WPF_.ViewModel
             set { selectedGame = value; OnPropertyChanged("SelectedGame"); }
         }
 
-
         public GameViewModel()
         {
-             Games = new ObservableCollection<Game>(db.Games);
+            Games = new ObservableCollection<Game>(db.Games);
+            searchGames = new ObservableCollection<Game>();
         }
     }
 }

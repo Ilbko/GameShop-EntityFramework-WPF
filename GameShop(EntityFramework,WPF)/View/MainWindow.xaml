@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GameShop_EntityFramework_WPF_" 
         xmlns:local1="clr-namespace:GameShop_EntityFramework_WPF_.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Closing="Window_Closing">
     <Window.Resources>
         <local1:StyleConverter x:Key="myStyleConverter"></local1:StyleConverter>
     </Window.Resources>
@@ -25,6 +26,8 @@
             <Style TargetType="DataGrid">
                 <Setter Property="IsReadOnly" Value="True"></Setter>
                 <Setter Property="AutoGenerateColumns" Value="False"></Setter>
+                <Setter Property="Grid.RowSpan" Value="3"></Setter>
+                <Setter Property="Grid.ColumnSpan" Value="2"></Setter>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -47,25 +50,25 @@
         <Menu Grid.ColumnSpan="5">
             <MenuItem Header="Поиск">
                 <MenuItem Header="По названию">
-                    <MenuItem Name="ByNameMenuItem" Header="Игры"></MenuItem>
-                    <MenuItem Name="ByStudioMenuItem" Header="Студии"></MenuItem>
-                    <MenuItem Name="ByNameAndStudioMenuItem" Header="Студии и игры"></MenuItem>
+                    <MenuItem Name="ByNameMenuItem" Header="Игры" Click="MenuItem_Click"></MenuItem>
+                    <MenuItem Name="ByStudioMenuItem" Header="Студии" Click="MenuItem_Click"></MenuItem>
+                    <MenuItem Name="ByNameAndStudioMenuItem" Header="Студии и игры" Click="MenuItem_Click"></MenuItem>
                 </MenuItem>
-                <MenuItem Name="ByStyle" Header="По стилю"></MenuItem>
-                <MenuItem Name="ByReleaseDate" Header="По году релиза"></MenuItem>
+                <MenuItem Name="ByStyle" Header="По стилю" Click="MenuItem_Click"></MenuItem>
+                <MenuItem Name="ByReleaseDate" Header="По году релиза" Click="MenuItem_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Поиск по запросам">
-                <MenuItem Name="AllSingleplayerMenuItem" Header="Все однопользовательские"></MenuItem>
-                <MenuItem Name="AllMultiplayerMenuItem" Header="Все многопользовательские"></MenuItem>
-                <MenuItem Name="MaxSoldMenuItem" Header="Макс. проданных копий"></MenuItem>
-                <MenuItem Name="MinSoldMenuItem" Header="Мин. проданных копий"></MenuItem>
-                <MenuItem Name="Top3BestMenuItem" Header="Топ-3 продаваемых игр"></MenuItem>
-                <MenuItem Name="Top3WorstMenuItem" Header="Топ-3 непродаваемых игр"></MenuItem>
+                <MenuItem Name="AllSingleplayerMenuItem" Header="Все однопользовательские" Click="AllSingleplayerMenuItem_MouseDown"></MenuItem>
+                <MenuItem Name="AllMultiplayerMenuItem" Header="Все многопользовательские" Click="AllMultiplayerMenuItem_MouseDown"></MenuItem>
+                <MenuItem Name="MaxSoldMenuItem" Header="Макс. проданных копий" Click="MaxSoldMenuItem_MouseDown"></MenuItem>
+                <MenuItem Name="MinSoldMenuItem" Header="Мин. проданных копий" Click="MinSoldMenuItem_MouseDown"></MenuItem>
+                <MenuItem Name="Top3BestMenuItem" Header="Топ-3 продаваемых игр" Click="Top3BestMenuItem_MouseDown"></MenuItem>
+                <MenuItem Name="Top3WorstMenuItem" Header="Топ-3 непродаваемых игр" Click="Top3WorstMenuItem_MouseDown"></MenuItem>
             </MenuItem>
         </Menu>
         <Label Grid.Row="1" Grid.Column="0" Foreground="GreenYellow" FontSize="15" Padding="1" Margin="4">Все игры</Label>
         <Label Grid.Row="1" Grid.Column="4" Foreground="Orange" FontSize="15" Padding="1" Margin="4">Найденные игры</Label>
-        <DataGrid Name="MainDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}" MouseDown="DataGrid_MouseDown" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid Name="MainDataGrid" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}" MouseDown="DataGrid_MouseDown" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Game_Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="StyleId" Binding="{Binding Game_StyleId}"></DataGridTextColumn>
@@ -76,8 +79,18 @@
                 <DataGridTextColumn Header="ReleaseDate" Binding="{Binding Game_ReleaseDate}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Name="DeleteButton" Grid.Row="2" Grid.Column="2" Margin="15" Foreground="Yellow" IsEnabled="False"> Удалить</Button>
-        <DataGrid Name="SearchDataGrid" Grid.Row="2" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"></DataGrid>
+        <Button Name="DeleteButton" Grid.Row="2" Grid.Column="2" Margin="15" Foreground="Yellow" IsEnabled="False" Click="DeleteButton_Click"> Удалить</Button>
+        <DataGrid Name="SearchDataGrid" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding searchGames}" SelectedItem="{Binding SelectedGame}" MouseDown="DataGrid_MouseDown" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Game_Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="StyleId" Binding="{Binding Game_StyleId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Game_Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Studio" Binding="{Binding Game_Studio}"></DataGridTextColumn>
+                <DataGridTextColumn Header="SoldAmount" Binding="{Binding Game_SoldAmount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="IsMultiplayer" Binding="{Binding Game_IsMultiplayer}"></DataGridTextColumn>
+                <DataGridTextColumn Header="ReleaseDate" Binding="{Binding Game_ReleaseDate}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding SelectedGame}">
             <Label Foreground="Aquamarine">Название</Label>
             <TextBox Name="NameTextBox" Text="{Binding Game_Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
