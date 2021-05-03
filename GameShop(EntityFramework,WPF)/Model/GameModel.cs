@@ -2,6 +2,7 @@ using System.Data.Entity;
 
 namespace GameShop_EntityFramework_WPF_.Model
 {
+    //Модель БД (EntityFramework)
     public partial class GameModel : DbContext
     {
         public GameModel()

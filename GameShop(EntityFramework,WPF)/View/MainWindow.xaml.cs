@@ -35,7 +35,11 @@ namespace GameShop_EntityFramework_WPF_
             //this.NameTextBox.Text = Communication.gameViewModel.Games.Count().ToString();
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e) => logic.Add(this);
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            logic.Add(this);
+            changes = true;
+        }
 
         private void SoldAmountTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e) => logic.TextHandle(e);
 

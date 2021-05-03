@@ -33,6 +33,7 @@ namespace GameShop_EntityFramework_WPF_.View
 
             this.mode = mode;
 
+            //В зависимости от МенюАйтема, который вызвал создание окна, окно модифицируется
             switch (mode)
             {
                 case 1:
